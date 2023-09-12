@@ -1,0 +1,530 @@
+
+rm(list=ls())
+
+setwd("C:/ENOE")
+
+# Se cargan los paquetes necesarios
+if (!require(pacman)) install.packages("pacman") 
+library(pacman)
+p_load("stringr", "data.table" ,"tidyverse","dplyr", "srvyr")
+
+# Promedio trimestral de los valores de la Línea de Pobreza Extrema por Ingresos
+
+ut105 <- 754.2
+rt105 <- 556.78
+ut205 <- 778.81
+rt205 <- 581.33
+ut305 <- 779.81
+rt305 <- 579
+ut405 <- 777.34
+rt405 <- 574.19
+
+ut106 <- 793.88
+rt106 <- 589.73
+ut206 <- 788.75
+rt206 <- 583.12
+ut306 <- 805.16
+rt306 <- 599.09
+ut406 <- 834.08
+rt406 <- 629.22
+
+ut107 <- 851.23
+rt107 <- 641.5
+ut207 <- 840.49
+rt207 <- 629.76
+ut307 <- 846.91
+rt307 <- 634.21
+ut407 <- 866.83
+rt407 <- 650.59
+
+ut108 <- 875.77
+rt108 <- 655.79
+ut208 <- 893.87
+rt208 <- 671.92
+ut308 <- 915.77
+rt308 <- 689.23
+ut408 <- 945.75
+rt408 <- 715.18
+
+ut109 <- 959.84
+rt109 <- 724.5
+ut209 <- 982.88
+rt209 <- 747.36
+ut309 <- 996.59
+rt309 <- 758.12
+ut409 <- 998.91
+rt409 <- 759.1
+
+ut110 <- 1026.57
+rt110 <- 780.73
+ut210 <- 1017.39
+rt210 <- 769.93
+ut310 <- 1008.45
+rt310 <- 757.71
+ut410 <- 1032.81
+rt410 <- 779.66
+
+ut111 <- 1049.07
+rt111 <- 791.31
+ut211 <- 1049.74
+rt211 <- 793
+ut311 <- 1051.53
+rt311 <- 794.21
+ut411 <- 1076.46
+rt411 <- 817.32
+
+ut112 <- 1106.36
+rt112 <- 843.6
+ut212 <- 1113.08
+rt212 <- 847.74
+ut312 <- 1152.23
+rt312 <- 884.25
+ut412 <- 1172.86
+rt412 <- 901.01
+
+ut113 <- 1185.68
+rt113 <- 908.25
+ut213 <- 1197.91
+rt213 <- 918.9
+ut313 <- 1197.24
+rt313 <- 913.56
+ut413 <- 1220.45
+rt413 <- 934.09
+
+ut114 <- 1252.56
+rt114 <- 952.71
+ut214 <- 1243.86
+rt214 <- 939.94
+ut314 <- 1264.97
+rt314 <- 954.15
+ut414 <- 1295.15
+rt414 <- 982.12
+
+ut115 <- 1296.14
+rt115 <- 981.5
+ut215 <- 1300.42
+rt215 <- 985.56
+ut315 <- 1312.35
+rt315 <- 992.04
+ut415 <- 1329.88
+rt415 <- 1006.05
+
+ut116 <- 1366.93
+rt116 <- 1039.95
+ut216 <- 1359.11
+rt216 <- 1028.42
+ut316 <- 1358.61
+rt316 <- 1025.84
+ut416 <- 1388.35
+rt416 <- 1054.02
+
+ut117 <- 1407.01
+rt117 <- 1061.68
+ut217 <- 1439.17
+rt217 <- 1090.56
+ut317 <- 1490.8
+rt317 <- 1136.26
+ut417 <- 1501.22
+rt417 <- 1141.14
+
+ut118 <- 1509.99
+rt118 <- 1144.85
+ut218 <- 1508.32
+rt218 <- 1139.69
+ut318 <- 1537.71
+rt318 <- 1159.55
+ut418 <- 1564.27
+rt418 <- 1186.53
+
+ut119 <- 1594.81
+rt119 <- 1209.52
+ut219 <- 1597.63
+rt219 <- 1209.34
+ut319 <- 1604.31
+rt319 <- 1212.42
+ut419 <- 1619.78
+rt419 <- 1225.79
+
+ut120 <- 1664.71
+rt120 <- 1266.14
+ut220 <- 1682.02
+rt220 <- 1282.64
+ut320 <- 1701.39
+rt320 <- 1298.6
+ut420 <- 1719.75
+rt420 <- 1313.92
+
+ut121 <- 1732.14
+rt121 <- 1317.79
+ut221 <- 1777.32
+rt221 <- 1358.6
+ut321 <- 1828.63
+rt321 <- 1400.08
+ut421 <- 1877.13
+rt421 <- 1443.29
+
+ut122 <- 1951.74
+rt122 <- 1498.46
+ut222 <- 1990.99
+rt222 <- 1530.41
+ut322 <- 2081.04
+rt322 <- 1597.57
+ut422 <- 2115.73
+rt422 <- 1625.32
+
+ut123 <- 2154.34
+rt123 <- 1651.91
+ut223 <- 2176.94
+rt223 <- 1665.47
+
+
+
+tx <- {c("t105","t205","t305","t405",
+         "t106","t206","t306","t406",
+         "t107","t207","t307","t407",
+         "t108","t208","t308","t408",
+         "t109","t209","t309","t409",
+         "t110","t210","t310","t410",
+         "t111","t211","t311","t411",
+         "t112","t212","t312","t412",
+         "t113","t213","t313","t413",
+         "t114","t214","t314","t414",
+         "t115","t215","t315","t415",
+         "t116","t216","t316","t416",
+         "t117","t217","t317","t417",
+         "t118","t218","t318","t418",
+         "t119","t219","t319","t419",
+         "t120",       "t320","t420",
+         "t121","t221","t321","t421",
+         "t122","t222","t322","t422",
+         "t123","t223")} 
+fx.ingreso <- function(x) {
+  
+  if(x %in% c("t320","t420","t121","t221")){
+    df <- fread(paste0("coe2/enoen_coe2", x, ".csv", sep=""))
+    colnames(df) <- tolower(colnames(df))
+    df <- mutate(df, foliop = paste0(str_pad(cd_a,2, "left", pad = "0"),
+                                     str_pad(ent,2, "left", pad = "0"),
+                                     str_pad(con,5, "left", pad = "0"),
+                                     str_pad(v_sel,2, "left", pad = "0"),
+                                     n_hog, h_mud, 
+                                     str_pad(n_ren,2, "left", pad = "0"),
+                                     tipo, ca,
+                                     str_pad(mes_cal,2, "left", pad = "0"),
+                                     sep="")) %>%
+      dplyr::select(foliop, p6c, p6b2, p6_9, p6a3)
+    
+    df2 <- fread(paste0("sdem/enoen_sdem", x, ".csv", sep=""))
+    colnames(df2) <- tolower(colnames(df2))  
+    df2 <- dplyr::filter(df2, r_def==0 & (c_res==1 | c_res==3) ) %>%
+      rename(fac=fac_tri, t_loc=t_loc_tri) %>%
+      mutate(folioh = paste0(str_pad(cd_a,2, "left", pad = "0"),
+                             str_pad(ent,2, "left", pad = "0"),
+                             str_pad(con,5, "left", pad = "0"),
+                             str_pad(v_sel,2, "left", pad = "0"),
+                             n_hog, h_mud, tipo, ca,
+                             str_pad(mes_cal,2, "left", pad = "0"),
+                             sep=""),
+             foliop = paste0(str_pad(cd_a,2, "left", pad = "0"),
+                             str_pad(ent,2, "left", pad = "0"),
+                             str_pad(con,5, "left", pad = "0"),
+                             str_pad(v_sel,2, "left", pad = "0"),
+                             n_hog, h_mud, 
+                             str_pad(n_ren,2, "left", pad = "0"),
+                             tipo, ca,
+                             str_pad(mes_cal,2, "left", pad = "0"),
+                             sep="")) %>%
+      dplyr::select(folioh, foliop, salario, t_loc,
+                    fac, clase1, clase2, ent, ingocup, mun)}
+  else{
+    
+    if(x %in% c("t321","t421","t122","t222","t322","t422")){ 
+      df <- fread(paste0("coe2/enoen_coe2", x, ".csv", sep=""))
+      colnames(df) <- tolower(colnames(df))
+      df <- mutate(df, foliop = paste0(str_pad(cd_a,2, "left", pad = "0"),
+                                       str_pad(ent,2, "left", pad = "0"),
+                                       str_pad(con,5, "left", pad = "0"),
+                                       str_pad(v_sel,2, "left", pad = "0"),
+                                       n_hog, h_mud, 
+                                       str_pad(n_ren,2, "left", pad = "0"),
+                                       tipo,
+                                       str_pad(mes_cal,2, "left", pad = "0"),
+                                       sep="")) %>%
+        dplyr::select(foliop, p6c, p6b2, p6_9, p6a3)
+      
+      df2 <- fread(paste0("sdem/enoen_sdem", x, ".csv", sep=""))
+      colnames(df2) <- tolower(colnames(df2))  
+      df2 <- dplyr::filter(df2, r_def==0 & (c_res==1 | c_res==3) ) %>%
+        rename(fac=fac_tri, t_loc=t_loc_tri) %>%
+        mutate(folioh = paste0(str_pad(cd_a,2, "left", pad = "0"),
+                               str_pad(ent,2, "left", pad = "0"),
+                               str_pad(con,5, "left", pad = "0"),
+                               str_pad(v_sel,2, "left", pad = "0"),
+                               n_hog, h_mud, tipo,
+                               str_pad(mes_cal,2, "left", pad = "0"),
+                               sep=""),
+               foliop = paste0(str_pad(cd_a,2, "left", pad = "0"),
+                               str_pad(ent,2, "left", pad = "0"),
+                               str_pad(con,5, "left", pad = "0"),
+                               str_pad(v_sel,2, "left", pad = "0"),
+                               n_hog, h_mud, 
+                               str_pad(n_ren,2, "left", pad = "0"),
+                               tipo,
+                               str_pad(mes_cal,2, "left", pad = "0"),
+                               sep="")) %>%
+        dplyr::select(folioh, foliop, salario, t_loc,
+                      fac, clase1, clase2, ent, ingocup, mun)}
+    else{
+      
+      # Derivado de los cambios presentados en la Nota Técnica del primer trimestre de 2023, el INEGI
+      # informó que se retomó el levantamiento de la ENOE y, que los métodos de recolección de la 
+      # información se realizaron por medio de entrevistas cara a cara y telefónicas.  
+      
+      if(x %in% c("t123","t223")){ 
+        df <- fread(paste0("coe2/enoe_coe2", x, ".csv", sep=""))
+        colnames(df) <- tolower(colnames(df))
+        df <- mutate(df, foliop = paste0(str_pad(cd_a,2, "left", pad = "0"),
+                                         str_pad(ent,2, "left", pad = "0"),
+                                         str_pad(con,5, "left", pad = "0"),
+                                         str_pad(v_sel,2, "left", pad = "0"),
+                                         n_hog, h_mud, 
+                                         str_pad(n_ren,2, "left", pad = "0"),
+                                         tipo,
+                                         str_pad(mes_cal,2, "left", pad = "0"),
+                                         sep="")) %>%
+          dplyr::select(foliop, p6c, p6b2, p6_9, p6a3)
+        
+        df2 <- fread(paste0("sdem/enoe_sdem", x, ".csv", sep=""))
+        colnames(df2) <- tolower(colnames(df2))  
+        df2 <- dplyr::filter(df2, r_def==0 & (c_res==1 | c_res==3) ) %>%
+          rename(fac=fac_tri, t_loc=t_loc_tri) %>%
+          mutate(folioh = paste0(str_pad(cd_a,2, "left", pad = "0"),
+                                 str_pad(ent,2, "left", pad = "0"),
+                                 str_pad(con,5, "left", pad = "0"),
+                                 str_pad(v_sel,2, "left", pad = "0"),
+                                 n_hog, h_mud, tipo,
+                                 str_pad(mes_cal,2, "left", pad = "0"),
+                                 sep=""),
+                 foliop = paste0(str_pad(cd_a,2, "left", pad = "0"),
+                                 str_pad(ent,2, "left", pad = "0"),
+                                 str_pad(con,5, "left", pad = "0"),
+                                 str_pad(v_sel,2, "left", pad = "0"),
+                                 n_hog, h_mud, 
+                                 str_pad(n_ren,2, "left", pad = "0"),
+                                 tipo,
+                                 str_pad(mes_cal,2, "left", pad = "0"),
+                                 sep="")) %>%
+          dplyr::select(folioh, foliop, salario, t_loc,
+                        fac, clase1, clase2, ent, ingocup, mun)}
+      else{
+        
+        df <- fread(paste0("coe2/coe2", x, ".csv", sep=""))
+        colnames(df) <- tolower(colnames(df))
+        df <- mutate(df, 
+                     foliop = paste0(str_pad(cd_a,2, "left", pad = "0"),
+                                     str_pad(ent,2, "left", pad = "0"),
+                                     str_pad(con,5, "left", pad = "0"),
+                                     str_pad(v_sel,2, "left", pad = "0"),
+                                     n_hog, h_mud, 
+                                     str_pad(n_ren,2, "left", pad = "0"),
+                                     sep="")) %>%
+          dplyr::select(foliop, p6c, p6b2, p6_9, p6a3)
+        
+        df2 <- fread(paste0("sdem/sdem", x, ".csv", sep=""))
+        colnames(df2) <- tolower(colnames(df2))
+        df2 <- dplyr::filter(df2, r_def==0 & (c_res==1 | c_res==3) ) %>%
+          mutate(folioh = paste0(str_pad(cd_a,2, "left", pad = "0"),
+                                 str_pad(ent,2, "left", pad = "0"),
+                                 str_pad(con,5, "left", pad = "0"),
+                                 str_pad(v_sel,2, "left", pad = "0"),
+                                 n_hog, h_mud,
+                                 sep=""),
+                 foliop = paste0(str_pad(cd_a,2, "left", pad = "0"),
+                                 str_pad(ent,2, "left", pad = "0"),
+                                 str_pad(con,5, "left", pad = "0"),
+                                 str_pad(v_sel,2, "left", pad = "0"),
+                                 n_hog, h_mud, 
+                                 str_pad(n_ren,2, "left", pad = "0"),
+                                 sep="")) %>%
+          dplyr::select(folioh, foliop, salario, t_loc,
+                        fac, clase1, clase2, ent, ingocup, mun)
+      }}}
+  
+  df <- left_join(df2, df, by="foliop") %>%
+    mutate(ocupado = ifelse(clase1 == 1 & clase2 == 1, 1, 0),
+           p6b2 = as.numeric(p6b2),
+           p6c  = as.numeric(p6c))
+  
+  df$p6b2[df$p6b2==999998 | df$p6b2==999999] <- NA
+  
+  # Recuperación de ingresos por rangos de salarios mínimos
+  df <- mutate(df, ingreso = if_else(ocupado == 0 | (is.na(p6b2) & (p6_9==9 | p6a3=="3")), 0, p6b2)) 
+  sub <- which(is.na(df$p6b2) & (df$p6c==1))
+  df$ingreso[sub] <- 0.5 * df$salario[sub]
+  sub <- which(is.na(df$p6b2) & df$p6c==2)
+  df$ingreso[sub] <- 1 * df$salario[sub]
+  sub <- which(is.na(df$p6b2) & df$p6c==3)
+  df$ingreso[sub] <- 1.5 * df$salario[sub]
+  sub <- which(is.na(df$p6b2) & df$p6c==4)
+  df$ingreso[sub] <- 2.5 * df$salario[sub]
+  sub <- which(is.na(df$p6b2) & df$p6c==5)
+  df$ingreso[sub] <- 4 * df$salario[sub]
+  sub <- which(is.na(df$p6b2) & df$p6c==6)
+  df$ingreso[sub] <- 7.5 * df$salario[sub]
+  sub <- which(is.na(df$p6b2) & df$p6c==7)
+  df$ingreso[sub] <- 10 * df$salario[sub]
+  
+  df <- mutate(df, factor = fac,
+               tamh=1,
+               rururb = if_else((as.numeric(t_loc)>=1 & as.numeric(t_loc)<=3), 0, 1),
+               ent = as.numeric(ent),
+               mv = if_else(is.na(ingreso) & ocupado == 1, 1, 0)) %>%
+    dplyr::select(folioh, tamh, ingreso, rururb, factor, ent, mun, mv, ocupado) %>%
+    group_by(folioh) %>% summarise(tamh.sm = sum(tamh),
+                                   ingreso.sm = sum(ingreso),
+                                   mv.sm = sum(mv), 
+                                   ocupado.sm = sum(ocupado),
+                                   rururb.mn = mean(rururb), 
+                                   factor.mn = mean(factor), 
+                                   ent.mn = mean(ent), 
+                                   mun=first(mun)) %>%
+    rename(tamh = tamh.sm, ingreso = ingreso.sm, mv = mv.sm, ocupado = ocupado.sm,
+           rururb = rururb.mn, factor = factor.mn, ent = ent.mn) %>%
+    dplyr::select(folioh, tamh, ingreso, mv, ocupado, rururb, factor, ent, mun) %>%
+    
+    mutate(mv = if_else(!is.na(mv) & mv > 0, 1, 0)) %>%
+    
+    #Se elimina a los hogares que tienen valores perdidos en ingreso    
+    dplyr::filter(mv != 1)
+  
+  
+  ################################################################################
+  #
+  #             Parte III COMPARACIÓN DEL INGRESO DEL HOGAR CON 
+  #         EL PROMEDIO DE LA LÍNEA DE POBREZA EXTREMA POR INGRESOS 
+  # 
+  ################################################################################
+  
+  nombre <- paste0("lp", x, sep ="")
+  df <- mutate(df, factorp = df$factor * df$tamh,
+               pob = if_else(rururb == 0,
+                             if_else((ingreso / tamh) < get(paste0("u", x, sep="")),1,0),
+                             if_else((ingreso / tamh) < get(paste0("r", x, sep="")),1,0)))
+  
+  
+  sd <- as_survey_design(df, weights = factorp)
+  df.rururb <- sd %>% group_by(rururb) %>%
+    summarise(pob_mean = survey_mean(pob, na.rm=TRUE))
+  
+  
+  df_r <- data.frame(x = 1)
+  df_r$TLP <- summarise(sd, pob_mean = survey_mean(pob))$pob_mean[1] * 100
+  df_r$TLPu <- df.rururb$pob_mean[1] * 100
+  df_r$TLPr <- df.rururb$pob_mean[2] * 100
+  
+  df.ent <- group_by(sd, ent) %>%
+    summarise(pob_mean = survey_mean(pob))
+  
+  
+  for(y in 1:32) {
+    nombre <- paste0("TLP", y, sep ="")
+    df_r[[nombre]] <- df.ent$pob_mean[y] * 100
+  }
+  
+  
+  
+  df_r <- dplyr::select(df_r, starts_with("TLP"))
+  df_r$periodo <- x
+  df_r <- dplyr::select(df_r, periodo, starts_with("TLP"))
+  
+  print(paste("Fin del cálculo para el periodo ", x, sep =""))
+  return(df_r)
+  
+}
+
+#Se realiza el proceso para todos los trimestres
+f<-map(tx, fx.ingreso)
+df <- f[[1]]
+for (i in 2:length(f)) {
+  df <- bind_rows(df, f[[i]])
+}
+
+df <-dplyr::select(df, periodo, starts_with("TLP"))
+
+df <- dplyr::filter(df, !is.na(TLP)) %>% 
+  mutate(periodo = substr(periodo, 2, 5))
+df$periodo <- as.numeric(df$periodo)
+
+n.periodo <- {c("I 2005","II 2005","III 2005","IV 2005",
+                "I 2006","II 2006","III 2006","IV 2006",
+                "I 2007","II 2007","III 2007","IV 2007",
+                "I 2008","II 2008","III 2008","IV 2008",
+                "I 2009","II 2009","III 2009","IV 2009",
+                "I 2010","II 2010","III 2010","IV 2010",
+                "I 2011","II 2011","III 2011","IV 2011",
+                "I 2012","II 2012","III 2012","IV 2012",
+                "I 2013","II 2013","III 2013","IV 2013",
+                "I 2014","II 2014","III 2014","IV 2014",
+                "I 2015","II 2015","III 2015","IV 2015",
+                "I 2016","II 2016","III 2016","IV 2016",
+                "I 2017","II 2017","III 2017","IV 2017",
+                "I 2018","II 2018","III 2018","IV 2018",
+                "I 2019","II 2019","III 2019","IV 2019",
+                "I 2020",          "III 2020","IV 2020",
+                "I 2021","II 2021","III 2021","IV 2021",
+                "I 2022","II 2022","III 2022","IV 2022",
+                "I 2023","II 2023")} 
+
+
+n.tlp <-{ c("periodo",
+            "Nacional",
+            "Urbano",
+            "Rural",
+            "Aguascalientes",
+            "Baja_California",
+            "Baja_California_Sur",
+            "Campeche",
+            "Coahuila",
+            "Colima",
+            "Chiapas",
+            "Chihuahua",
+            "Ciudad_de_México",
+            "Durango",
+            "Guanajuato",
+            "Guerrero",
+            "Hidalgo",
+            "Jalisco",
+            "Estado_de_México",
+            "Michoacán",
+            "Morelos",
+            "Nayarit",
+            "Nuevo_León",
+            "Oaxaca",
+            "Puebla",
+            "Querétaro",
+            "Quintana_Roo",
+            "San_Luis_Potosí",
+            "Sinaloa",
+            "Sonora",
+            "Tabasco",
+            "Tamaulipas",
+            "Tlaxcala",
+            "Veracruz",
+            "Yucatán",
+            "Zacatecas")}
+
+base <- df[df$periodo==120,]
+df_itlp <- data.frame(mapply('/', df, base))
+df_itlp$periodo <- df$periodo
+
+df <- data.frame(sapply(df, FUN=round, digits=10))
+df_itlp <- data.frame(sapply(df_itlp, FUN=round, digits=4))
+
+rownames(df) <- n.periodo
+names(df) <- n.tlp
+
+rownames(df_itlp) <- n.periodo
+names(df_itlp) <- n.tlp
+
+fwrite(df,"temp/pobreza_laboral.csv", bom = TRUE)
+fwrite(df_itlp,"temp/itlp.csv", bom = TRUE)
